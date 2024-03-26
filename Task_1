@@ -1,0 +1,20 @@
+from datetime import datetime, timedelta
+from collections import defaultdict
+
+def get_birthdays_per_week(users):
+   birthdays = defaultdict(list)
+   for user in users:
+      name = user.get("name")
+      birthday = user.get("birthday")
+      birthdays[birthday].append(name)
+      today = datetime.today()
+   for birthday, names in birthdays.items():
+      birthday_this_year = birthday.replace(year = today.year)
+      if birthday_this_year < today:
+         birthday_this_year = birthday_this_year.replace(year = today.year + 1)
+         delta_days = (birthday_this_year - today).day
+         if 0<=delta_days <=6:
+            congratulation_day = (today + timedelta(days=delta_days)).strftime("%A")
+            if congratulation_day in ["Saturday", "Sunday"]:
+               congratulation_day = "Monday"
+         print(f"On{congratulation_day}, congratulate:{",".join(names)}")
